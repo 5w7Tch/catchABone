@@ -38,7 +38,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         lives = 5;
     }
     private void finish(){
-        if(score == 100){
+        if(score == WINNING_SCORE){
             win();
         }
         if(lives == 0){
@@ -57,6 +57,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         base.addLose(score);
     }
     private void win(){
+        removeAll();
         base.addWin(score);
     }
     private void intro(){
@@ -85,7 +86,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         fill.setColor(Color.CYAN);
         while(percent <= 100){
             percento.setLabel(percent +"%");
-            pause(20);
+            pause(DELAY);
             fill.setBounds(rect.getX()+1,rect.getY()+1,percent,19);
             percent++;
         }
@@ -105,7 +106,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         lvlNum.setColor(Color.GREEN);
         add(level,getWidth()-level.getWidth()-15,5+level.getAscent());
         add(lvlNum, level.getX()+level.getWidth(), level.getY());
-        number = new GLabel(score +"/100");
+        number = new GLabel(score +"/" + WINNING_SCORE);
         number.setFont("Baskerville-15");
         number.setColor(Color.GREEN);
         GLabel score = new GLabel("SCORE: ");
@@ -133,7 +134,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
     }
     private void boneRain(){
         double delay = 30;
-        while(lives != 0 || score != 100){
+        while(lives != 0 || score != WINNING_SCORE){
             bone = new GImage("bone.png");
             bone.setBounds(0,0,70,40);
             double X = rg.nextDouble(1.0,9.0);
@@ -155,10 +156,10 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
                     remove(bone);
                     bone = null;
                     addScore();
-                    if(score == 20){
+                    if(score == LvL2_SCORE){
                         delay = 13;
                     }
-                    if(score == 60){
+                    if(score == LvL3_SCORE){
                         delay = 7;
                     }
                     break;
@@ -171,7 +172,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
             if(lives == 0){
                 break;
             }
-            if(score == 100){
+            if(score == WINNING_SCORE){
                 break;
             }
             pause(DELAY);
@@ -184,8 +185,8 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
     }
     private void addScore(){
         score++;
-        number.setLabel(score +"/100");
-        if(score == 20){
+        number.setLabel(score + "/" + WINNING_SCORE);
+        if(score == LvL2_SCORE){
             level++;
             remove(dog);
             dog.setImage("dogLvL2.png");
@@ -193,7 +194,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
             dog.setBounds(0,0, 140,70);
             add(dog,getWidth()/2.0-dog.getWidth()/2.0, getHeight()-dog.getHeight());
         }
-        if(score == 60){
+        if(score == LvL3_SCORE){
             level++;
             remove(dog);
             dog.setImage("dogLvL3.png");
