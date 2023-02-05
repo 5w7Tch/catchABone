@@ -10,7 +10,7 @@ public interface catchABoneConstants {
     /*
      * describes amount of scores you need to collect to win.
      */
-    public static final int WINNING_SCORE = 100;
+    public static final int WINNING_SCORE = 120;
     /*
      * describes amount of scores you need to collect to level up to LvL-2.
      */

@@ -23,8 +23,9 @@ public class catchABoneDataBase {
         }
     }
 
-    public Iterator<Integer> getHistory(){
-        return scores.iterator();
+
+    public ArrayList<Integer> getHistory(){
+        return scores;
     }
     public boolean hasnotPlayed(){
         return scores.isEmpty();
