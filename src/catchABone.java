@@ -8,8 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class catchABone  extends GraphicsProgram implements catchABoneConstants{
+    GImage settings;
     GLabel play;
     catchABoneDataBase base;
     int lives = 20;
@@ -27,10 +29,11 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
     public void init() {
         setSize(350,650);
         base = new catchABoneDataBase();
-
+        addMouseListeners();
     }
     public void run(){
         intro();
+        waitForClick();
         waitForClick();
         Start();
         finish();
@@ -42,7 +45,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
     private void reset(){
         score = 0;
         level = 1;
-        lives = 5;
+        lives = 20;
     }
     private void finish(){
         if(score == WINNING_SCORE){
@@ -51,6 +54,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         if(lives == 0){
             lost();
         }
+
     }
     private void lost(){
         removeAll();
@@ -100,19 +104,15 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         if(base.hasnotPlayed()) {
             loadUp();
         }
-        if(!base.hasnotPlayed()){
-            //importHistory();
-        }
+
+        settings = new GImage("settings.png");
+        settings.setBounds(0,0,40,40);
         play = new GLabel("Play");
         play.setFont("Baskerville-30");
         add(play,getWidth()/2.0-play.getWidth()/2,getHeight()-DOG_OFFSET/2.0);
+        add(settings,getWidth()-10-settings.getWidth(),10);
     }
-//    private void importHistory(){
-//        history.removeAll();
-//        for (int i = 0; i < base.getHistory().size(); i++) {
-//            history.addItem("null");
-//        }
-//    }
+
     private void loadUp(){
         int percent = 0;
         GRect rect = new GRect(100,20);
@@ -176,7 +176,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         dog = new GImage("dog.png");
         dog.setBounds(0,0,140,70);
         add(dog,getWidth()/2.0-dog.getWidth()/2.0, getHeight()-dog.getHeight());
-        addMouseListeners();
+        dog.addMouseListener(this);
     }
     private void boneRain(){
         double delay = 30;
@@ -489,35 +489,40 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         return count == 2;
     }
     public void mouseMoved(MouseEvent e){
-        if(!outOfArea(e.getX())) {
+        if(!outOfArea(e.getX()) && dog != null) {
             dog.setLocation(e.getX()-dog.getWidth()/2, dog.getY());
         }
     }
     private boolean outOfArea(double x){
-        return x >= getWidth()-dog.getWidth()/6 || x <= 0+dog.getWidth()/6;
-    }
-
-    public void actionPerformed(ActionEvent e) {
-
+        if(dog != null){
+            return x >= getWidth()-dog.getWidth()/6 || x <= 0+dog.getWidth()/6;
+        }
+        return false;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        GPoint point = new GPoint(e.getX(),e.getY());
-        if(playZone(point)){
 
+        GObject obj = getElementAt(e.getX(),e.getY());
+
+        if(obj == settings){
+            displaySettings();
         }
     }
-
-    private boolean playZone(GPoint point){
-        int count  = 0;
-        if(point.getY() >= play.getY() - play.getAscent() && point.getY() <= play.getY()){
-            count ++;
+    private void displaySettings(){
+        removeAll();
+        GLabel history = new GLabel("Top Scores");
+        history.setFont("Baskerville-30");
+        add(history,getWidth()/2.0-history.getWidth()/2,10+history.getAscent());
+        ArrayList<Integer> scoreHistory = base.getHistory();
+        int y = 10;
+        for (int i = 0; i < scoreHistory.size()-2; i++) {
+            GLabel score = new GLabel(scoreHistory.get(i).toString());
+            add(score,20,history.getY()+20+score.getAscent()*i+y*i);
         }
-        if(point.getX() >= play.getX() && point.getX() <= play.getX()+play.getWidth()){
-            count++;
-        }
-        return count == 2;
+        GLabel goOn = new GLabel("Click to start");
+        goOn.setFont("Baskerville-20");
+        add(goOn,getWidth()/2.0-goOn.getWidth()/2,getHeight()-5);
     }
 }
 
