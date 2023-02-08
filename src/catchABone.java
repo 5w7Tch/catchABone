@@ -14,7 +14,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
     GImage settings;
     GLabel play;
     catchABoneDataBase base;
-    int lives = 20;
+    int lives = AMOUNT_OF_LIVES;
     GLabel displayLives;
     int level = 1;
     GLabel lvlNum;
@@ -45,7 +45,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
     private void reset(){
         score = 0;
         level = 1;
-        lives = 20;
+        lives = AMOUNT_OF_LIVES;
     }
     private void finish(){
         if(score == WINNING_SCORE){
@@ -110,7 +110,10 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         play = new GLabel("Play");
         play.setFont("Baskerville-30");
         add(play,getWidth()/2.0-play.getWidth()/2,getHeight()-DOG_OFFSET/2.0);
-        add(settings,getWidth()-10-settings.getWidth(),10);
+        if(!base.hasnotPlayed()) {
+            add(settings,getWidth()-10-settings.getWidth(),10);
+        }
+
     }
 
     private void loadUp(){
@@ -192,7 +195,7 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
                 delay = 7;
                 lvl3(delay);
             }
-            if(lives <= 0){
+            if(lives == 0){
                 break;
             }
             if(score == WINNING_SCORE){
@@ -377,6 +380,9 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
                     addScore();
                 }
             }
+            if(score == WINNING_SCORE){
+                return;
+            }
             if(bone1 != null) {
                 if(area1()) {
                     remove(bone1);
@@ -384,12 +390,18 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
                     addScore();
                 }
             }
+            if(score == WINNING_SCORE){
+                return;
+            }
             if(bone2 != null) {
                 if(area2()) {
                     remove(bone2);
                     bone2 = null;
                     addScore();
                 }
+            }
+            if(score == WINNING_SCORE){
+                return;
             }
             if(bone != null || bone1 != null || bone2 != null){
                 if(bone != null) {
@@ -410,8 +422,14 @@ public class catchABone  extends GraphicsProgram implements catchABoneConstants{
         if(bone != null){
             loseLive();
         }
+        if(lives == 0){
+            return;
+        }
         if(bone1 != null){
             loseLive();
+        }
+        if(lives == 0){
+            return;
         }
         if(bone2 != null){
             loseLive();

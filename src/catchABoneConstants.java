@@ -19,5 +19,9 @@ public interface catchABoneConstants {
      * describes amount of scores you need to collect to level up to LvL-3.
      */
     public static final int LvL3_SCORE = 60;
+    /*
+     * describes amount of lives you get..
+     */
+    public static final int AMOUNT_OF_LIVES = 20;
 
 }
